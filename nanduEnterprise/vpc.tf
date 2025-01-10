@@ -67,6 +67,11 @@ resource "aws_route_table" "nandu-public-rt" {
   }
 }
 
+resource "aws_route_table_association" "nandu-public-rt-assoc" {
+  subnet_id      = aws_subnet.nandu-public-subnet.id
+  route_table_id = aws_route_table.nandu-public-rt.id
+}
+
 resource "aws_route_table" "nandu-private-rt" {
   vpc_id = aws_vpc.nandu-vpc.id
 
@@ -80,6 +85,10 @@ resource "aws_route_table" "nandu-private-rt" {
   }
 }
 
+resource "aws_route_table_association" "nandu-private-rt-assoc" {
+  subnet_id      = aws_subnet.nandu-private-subnet.id
+  route_table_id = aws_route_table.nandu-private-rt.id
+}
 
 ######################################Security Group############################################
 
@@ -138,5 +147,27 @@ resource "aws_security_group" "nandu-private-sg" {
 
   tags = {
     Name = "nandu-enterprise-private-sg"
+  }
+}
+
+resource "aws_security_group" "nandu-bastion-sg" {
+  vpc_id      = aws_vpc.nandu-vpc.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.128/25"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "nandu-enterprise-bastion-sg"
   }
 }
