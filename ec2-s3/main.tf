@@ -2,9 +2,9 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Generate a key pair and download the .pem file
-resource "aws_key_pair" "example_key" {
-  key_name   = "terra_key"
+#Generate a key pair and download the .pem file
+resource "aws_key_pair" "mahi_key" {
+  key_name   = "chackdeindia_key"
   public_key = file("~/.ssh/id_ed25519.pub")
 }
 
@@ -33,7 +33,7 @@ resource "aws_instance" "ubuntu_instance" {
   ami           = "ami-0e2c8caa4b6378d8c"
   instance_type = "t2.micro"
 
-  key_name      = aws_key_pair.example_key.key_name
+  key_name      = aws_key_pair.mahi_key.key_name
   security_groups = [aws_security_group.allow_all.name]
 
   user_data = <<-EOF
