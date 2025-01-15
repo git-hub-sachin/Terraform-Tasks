@@ -8,6 +8,7 @@ resource "aws_instance" "nandu-ec2" {
   user_data = var.user_data
 
   tags = {
-    Name = "nandu-enterprise-${each.key}"
+    Name = "nandu-enterprise-prod-${each.key}"
   }
 }
+

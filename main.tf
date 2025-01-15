@@ -4,7 +4,7 @@ module "vpc" {
   cidr              = "10.0.0.0/24"
   azs               = ["us-east-1a", "us-east-1b"]
   public_subnets    = ["10.0.0.0/25"]
-  private_subnets   = ["10.0.0.128/25"]
+  private_subnets   = ["10.0.0.0/25"]
   enable_nat_gateway = true
   single_nat_gateway = true
   tags = {
@@ -17,7 +17,7 @@ module "public_sg" {
   vpc_id    = module.vpc.vpc_id
   ingress_rules = {
     name      = "nandu-enterprise-public-sg"
-    from_port = [22, 80]
+    from_port = [22]
     to_port   = [22, 80]
     protocol  = ["tcp"]
     cidr_blocks = ["0.0.0.0/0"]
