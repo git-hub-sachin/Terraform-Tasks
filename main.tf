@@ -14,22 +14,26 @@ module "vpc" {
 
 module "public_sg" {
   source    = "./modules/sg"
-  name      = "nandu-enterprise-public-sg"
   vpc_id    = module.vpc.vpc_id
-  from_port = 22
-  to_port   = 22
-  protocol  = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
+  ingress_rules = {
+    name      = "nandu-enterprise-public-sg"
+    from_port = [22, 80]
+    to_port   = [22, 80]
+    protocol  = ["tcp"]
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 module "private_sg" {
   source    = "./modules/sg"
-  name      = "nandu-enterprise-private-sg"
   vpc_id    = module.vpc.vpc_id
-  from_port = 3306
-  to_port   = 3306
-  protocol  = "tcp"
-  cidr_blocks = ["10.0.0.0/24"]
+  ingress_rules = {
+    name      = "nandu-enterprise-private-sg"
+    from_port = [3306]
+    to_port   = [3306]
+    protocol  = ["tcp"]
+    cidr_blocks = ["10.0.0.0/24"]
+  }
 }
 
 module "public_ec2" {
