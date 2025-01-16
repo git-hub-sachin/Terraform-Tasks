@@ -11,7 +11,7 @@ variable "instance_type" {
 variable "subnet_id" {
   type = string
 }
-variable "security_groups" {
+variable "vpc_security_group_ids" {
   type = list(string)
 }
 variable "associate_public_ip_address" {

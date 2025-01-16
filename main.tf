@@ -4,7 +4,7 @@ module "vpc" {
   cidr              = "10.0.0.0/24"
   azs               = ["us-east-1a", "us-east-1b"]
   public_subnets    = ["10.0.0.0/25"]
-  private_subnets   = ["10.0.0.0/25"]
+  private_subnets   = ["10.0.0.128/25"]
   enable_nat_gateway = true
   single_nat_gateway = true
   tags = {
@@ -38,11 +38,11 @@ module "private_sg" {
 
 module "public_ec2" {
   source           = "./modules/ec2"
-  instances        = { for i in range(1,4) : i => i }
+  instances        = { for i in range(1,3) : i => i }
   ami              = "ami-0e2c8caa4b6378d8c"
   instance_type    = "t2.micro"
   subnet_id        = module.vpc.public_subnets[0]
-  security_groups  = [module.public_sg.sg_id]
+  vpc_security_group_ids  = [module.public_sg.sg_id]
   associate_public_ip_address = true
   user_data        = <<-EOF
     #!/bin/bash
@@ -56,11 +56,11 @@ module "public_ec2" {
 
 module "private_ec2" {
   source           = "./modules/ec2"
-  instances        = { for i in range(4,7) : i => i }
+  instances        = { for i in range(3,5) : i => i }
   ami              = "ami-0e2c8caa4b6378d8c"
   instance_type    = "t2.micro"
   subnet_id        = module.vpc.private_subnets[0]
-  security_groups  = [module.private_sg.sg_id]
+  vpc_security_group_ids  = [module.private_sg.sg_id]
   associate_public_ip_address = false
   user_data        = <<-EOF
     #!/bin/bash
@@ -70,5 +70,4 @@ module "private_ec2" {
     sudo systemctl enable mysql
   EOF
 }
-
 

@@ -3,7 +3,7 @@ resource "aws_instance" "nandu-ec2" {
   ami = var.ami
   instance_type = var.instance_type
   subnet_id = var.subnet_id
-  security_groups = var.security_groups
+  vpc_security_group_ids = var.vpc_security_group_ids
   associate_public_ip_address = var.associate_public_ip_address
   user_data = var.user_data
 
