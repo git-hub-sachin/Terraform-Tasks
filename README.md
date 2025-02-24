@@ -47,7 +47,7 @@ terraform_project/
 
 ## Prerequisites
 
-- **Terraform**: Version 1.0+ installed.
+- **Terraform**: Version 1.10.5 installed.
 - **AWS CLI**: Configured with credentials (`aws configure`).
 - **SSH Key Pair**: Created in both regions (e.g., `my-key-pair`) with the private key (`.pem`) file available locally.
 
