@@ -1,19 +1,24 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  description = "VPC ID"
+  value       = aws_vpc.main.id
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  description = "List of private subnet IDs"
+  value       = aws_subnet.private[*].id
 }
 
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  description = "List of public subnet IDs"
+  value       = aws_subnet.public[*].id
 }
 
 output "private_route_table_id" {
-  value = aws_route_table.private.id
+  description = "Private route table ID"
+  value       = aws_route_table.private.id
 }
 
 output "public_route_table_id" {
-  value = aws_route_table.public.id
+  description = "Public route table ID"
+  value       = aws_route_table.public.id
 }

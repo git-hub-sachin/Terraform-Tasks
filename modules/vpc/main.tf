@@ -21,7 +21,7 @@ resource "aws_subnet" "private" {
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 1)
   availability_zone = "${var.region}${element(["a", "b"], count.index)}"
   tags = {
-    Name = "private-subnet-${count.index}-${var.region}"
+    Name = "private-subnet-${var.region}-${count.index}"
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_subnet" "public" {
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index + 3)
   availability_zone = "${var.region}${element(["a", "b"], count.index)}"
   tags = {
-    Name = "public-subnet-${count.index}-${var.region}"
+    Name = "public-subnet-${var.region}-${count.index}"
   }
 }
 
@@ -52,32 +52,36 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
+  depends_on    = [aws_internet_gateway.igw]
   tags = {
     Name = "nat-gw-${var.region}"
   }
-  depends_on = [aws_internet_gateway.igw]
 }
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
   tags = {
     Name = "public-rt-${var.region}"
   }
 }
 
+resource "aws_route" "public_default" {
+  route_table_id         = aws_route_table.public.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
+}
+
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat.id
-  }
   tags = {
     Name = "private-rt-${var.region}"
   }
+}
+
+resource "aws_route" "private_default" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
 resource "aws_route_table_association" "public" {

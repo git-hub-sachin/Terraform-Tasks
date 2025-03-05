@@ -1,9 +1,9 @@
-variable "region" {
-  description = "AWS region"
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
   type        = string
 }
 
-variable "vpc_cidr" {
-  description = "VPC CIDR block"
+variable "region" {
+  description = "AWS region for the VPC"
   type        = string
 }

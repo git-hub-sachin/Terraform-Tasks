@@ -18,3 +18,18 @@ variable "ami_id" {
   type        = string
 }
 
+variable "eks_cidr_west1" {
+  description = "CIDR block of the us-west-1 EKS VPC"
+  type        = string
+}
+
+variable "eks_cidr_west2" {
+  description = "CIDR block of the us-west-2 EKS VPC"
+  type        = string
+}
+
+variable "region" {
+  description = "AWS region for the bastion host"
+  type        = string
+  default     = "us-west-1"
+}
