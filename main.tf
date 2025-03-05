@@ -104,3 +104,40 @@ resource "aws_vpc_peering_connection_accepter" "west2" {
   vpc_peering_connection_id = aws_vpc_peering_connection.west1_to_west2.id
   auto_accept              = true
 }
+
+
+# Routes for us-west-1 to us-west-2
+resource "aws_route" "west1_private_to_west2" {
+  provider                  = aws.west1
+  route_table_id            = module.vpc_west1.private_route_table_id
+  destination_cidr_block    = var.vpc_cidr_west2
+  vpc_peering_connection_id = aws_vpc_peering_connection.west1_to_west2.id
+  depends_on                = [aws_vpc_peering_connection_accepter.west2]
+}
+
+resource "aws_route" "west1_public_to_west2" {
+  provider                  = aws.west1
+  route_table_id            = module.vpc_west1.public_route_table_id
+  destination_cidr_block    = var.vpc_cidr_west2
+  vpc_peering_connection_id = aws_vpc_peering_connection.west1_to_west2.id
+  depends_on                = [aws_vpc_peering_connection_accepter.west2]
+}
+
+# Routes for us-west-2 to us-west-1
+resource "aws_route" "west2_private_to_west1" {
+  provider                  = aws.west2
+  route_table_id            = module.vpc_west2.private_route_table_id
+  destination_cidr_block    = var.vpc_cidr_west1
+  vpc_peering_connection_id = aws_vpc_peering_connection.west1_to_west2.id
+  depends_on                = [aws_vpc_peering_connection_accepter.west2]
+}
+
+resource "aws_route" "west2_public_to_west1" {
+  provider                  = aws.west2
+  route_table_id            = module.vpc_west2.public_route_table_id
+  destination_cidr_block    = var.vpc_cidr_west1
+  vpc_peering_connection_id = aws_vpc_peering_connection.west1_to_west2.id
+  depends_on                = [aws_vpc_peering_connection_accepter.west2]
+}
+
+
