@@ -2,19 +2,19 @@ provider "aws" {
   region = var.region
 }
 
-# resource "aws_s3_bucket" "tfstate" {
-#   bucket = var.tfstate_bucket_name
-#   tags = {
-#     Name = "${var.project_name}-tfstate"
-#   }
-# }
+resource "aws_s3_bucket" "tfstate" {
+  bucket = var.tfstate_bucket_name
+  tags = {
+    Name = "${var.project_name}-tfstate"
+  }
+}
 
-# resource "aws_s3_bucket_versioning" "tfstate_versioning" {
-#   bucket = aws_s3_bucket.tfstate.id
-#   versioning_configuration {
-#     status = "Enabled"
-#   }
-# }
+resource "aws_s3_bucket_versioning" "tfstate_versioning" {
+  bucket = aws_s3_bucket.tfstate.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
 
 
 resource "tls_private_key" "app_key" {
