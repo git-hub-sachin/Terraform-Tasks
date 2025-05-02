@@ -6,6 +6,10 @@ output "private_instance_id" {
   value = aws_instance.private.id
 }
 
+output "private_instance_ip" {
+  value = aws_instance.private.private_ip
+}
+
 output "private_security_group_id" {
   value = aws_security_group.private.id
 }
